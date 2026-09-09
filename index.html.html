@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Franklin Dental — Check In</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#F7FAFA;color:#17252A;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px 48px}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
+.logo{font-size:15px;font-weight:600;letter-spacing:.04em;color:#2B7A78;margin-bottom:8px}
+.card{background:#fff;border-radius:16px;box-shadow:0 2px 16px rgba(43,122,120,.08);padding:32px 24px;width:100%;max-width:420px;border:1px solid #D4E8E7}
+.success-card{background:#E8F8EF;border-radius:16px;padding:32px 24px;width:100%;max-width:420px;border:1px solid #B8E6CC;text-align:center}
+h2{font-size:22px;font-weight:700;color:#17252A;margin:0 0 6px;line-height:1.3}
+.sub{font-size:15px;color:#5C7A7D;margin:0 0 28px;line-height:1.5}
+.back-btn{background:none;border:none;color:#5C7A7D;font-size:14px;cursor:pointer;padding:8px 0;margin-bottom:12px;font-family:inherit}
+.progress{display:flex;gap:6px;margin-bottom:24px}
+.progress-dot{flex:1;height:4px;border-radius:2px;background:#D4E8E7;transition:background .3s}
+.progress-dot.done{background:#2B7A78}
+.progress-dot.active{background:#3AAFA9}
+label{font-size:13px;font-weight:600;color:#5C7A7D;margin-bottom:6px;display:block}
+input[type=text],input[type=tel],input[type=email],input[type=date]{width:100%;padding:14px 16px;border:1.5px solid #D4E8E7;border-radius:10px;font-size:16px;color:#17252A;outline:none;box-sizing:border-box;margin-bottom:12px;font-family:inherit}
+input:focus{border-color:#2B7A78}
+.btn-primary{width:100%;padding:15px;background:#2B7A78;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px}
+.btn-primary:disabled{background:#D4E8E7;cursor:not-allowed}
+.btn-secondary{width:100%;padding:13px;background:transparent;color:#2B7A78;border:1.5px solid #D4E8E7;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px}
+.fork-btn{display:flex;align-items:center;gap:16px;width:100%;padding:18px 20px;border:1.5px solid #D4E8E7;border-radius:12px;background:#fff;cursor:pointer;text-align:left;transition:all .15s;margin-bottom:12px;font-family:inherit}
+.fork-btn:hover{border-color:#2B7A78;background:#DEF2F1}
+.fork-icon{width:44px;height:44px;border-radius:10px;background:#DEF2F1;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px}
+.fork-label{font-size:16px;font-weight:600;color:#17252A;margin:0}
+.fork-desc{font-size:13px;color:#5C7A7D;margin:2px 0 0}
+.chip{display:inline-block;padding:10px 18px;border:1.5px solid #D4E8E7;border-radius:8px;background:#fff;color:#17252A;font-size:14px;cursor:pointer;margin:0 8px 8px 0;transition:all .15s}
+.chip.selected{border-color:#2B7A78;background:#DEF2F1;color:#1A5553;font-weight:600}
+.success-icon{width:64px;height:64px;border-radius:50%;background:#27AE60;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.info-box{background:#DEF2F1;border-radius:10px;padding:18px 20px;margin-bottom:20px}
+.warning-box{background:#FFF8E1;border-radius:8px;padding:12px 16px;font-size:13px;color:#7A6520;margin-bottom:12px;line-height:1.5}
+.next-steps{background:#fff;border-radius:10px;padding:16px 20px;text-align:left;margin-bottom:20px}
+.hidden{display:none!important}
+.center{text-align:center}
+.verify-input{letter-spacing:8px;text-align:center;font-size:24px!important}
+</style>
+</head>
+<body>
+
+<!-- WELCOME -->
+<div id="welcome" style="justify-content:center;min-height:100vh;display:flex;flex-direction:column;align-items:center">
+  <div class="center">
+    <div style="font-size:48px;margin-bottom:20px">🦷</div>
+    <h1 style="font-size:26px;font-weight:700;margin-bottom:8px">Franklin Dental</h1>
+    <p class="sub" style="margin-bottom:32px">Welcome! Preparing check-in…</p>
+    <div style="width:48px;height:4px;border-radius:2px;background:#3AAFA9;margin:0 auto;animation:pulse 1.2s ease-in-out infinite"></div>
+  </div>
+</div>
+
+<!-- FORK -->
+<div id="fork" class="hidden">
+  <div class="logo">Franklin Dental</div>
+  <div class="card">
+    <h2>How can we help you today?</h2>
+    <p class="sub">Select the option that best describes your visit.</p>
+    <button class="fork-btn" onclick="go('existing_name')">
+      <div class="fork-icon">📋</div>
+      <div><p class="fork-label">Check in for my appointment</p><p class="fork-desc">I already have an appointment scheduled</p></div>
+    </button>
+    <button class="fork-btn" onclick="go('walkin_name')">
+      <div class="fork-icon">🚶</div>
+      <div><p class="fork-label">Walk-in visit</p><p class="fork-desc">I'm a current patient without an appointment</p></div>
+    </button>
+    <button class="fork-btn" onclick="go('new_info')">
+      <div class="fork-icon">✨</div>
+      <div><p class="fork-label">I'm a new patient</p><p class="fork-desc">This is my first visit to Franklin Dental</p></div>
+    </button>
+  </div>
+</div>
+
+<!-- EXISTING: NAME -->
+<div id="existing_name" class="hidden">
+  <div class="logo">Franklin Dental</div>
+  <div class="card">
+    <button class="back-btn" onclick="go('fork')">← Back</button>
+    <div class="progress"><div class="progress-dot active"></div><div class="progress-dot"></div><div class="progress-dot"></div><div class="progress-dot"></div><div class="progress-dot"></div></div>
+    <h2>Let's find you</h2>
+    <p class="sub">Enter your name and date of birth so we can pull up your record.</p>
+    <label>First name</label><input type="text" id="ex_first" placeholder="Jane" oninput="checkExName()">
+    <label>Last name</label><input type="text" id="ex_last" placeholder="Smith" oninput="checkExName()">
+    <label>Date of birth</label><input type="date" id="ex_dob" oninput="checkExName()">
+    <button class="btn-primary" id="ex_name_btn" disabled onclick="go('existing_confirm')">Find my record</button>
+  </div>
+</div>
+
+<!-- EXISTING: CONFIRM -->
+<div id="existing_confirm" class="hidden">
+  <div class="logo">Franklin Dental</div>
+  <div class="card">
+    <button class="back-btn" onclick="go('existing_name')">← Back</button>
+    <div class="progress"><div class="progress-dot done"></div><div class="progress-dot active"></div><div class="progress-dot"></div><div class="progress-dot"></div><div class="progress-dot"></div></div>
+    <h2>Is this you?</h2>
+    <p class="sub">Please confirm your information.</p>
+    <div class="info-box">
+      <p id="confirm_name" style="font-size:17px;font-weight:600;margin-bottom:4px"></p>
+      <p id="confirm_dob" style="font-size:14px;color:#5C7A7D"></p>
+    </div>
+    <button class="btn-primary" onclick="go('existing_verify')">Yes, that's me</button>
+    <button class="btn-secondary" onclick="go('existing_name')">No, let me re-enter</button>
+  </div>
+</div>
+
+<!-- EXISTING: VERIFY -->
+<div id="existing_verify" class="hidden">
+  <div class="logo">Franklin Dental</div>
+  <div class="card">
+    <button class="back-btn" onclick="go('existing_confirm')">← Back</button>
+    <div class="progress"><div class="progress-dot done"></div><div class="progress-dot done"></div><div class="progress-dot active"></div><div class="progress-dot"></div><div class="progress-dot"></div></div>
+    <h2>Quick verification</h2>
+    <p class="sub">Enter the last four digits of the phone number on file.</p>
+    <label>Last 4 digits</label>
+    <input type="text" id="ex_phone" class="verify-input" placeholder="••••" maxlength="4" inputmode="numeric" oninput="this.value=this.value.replace(/\D/g,'').slice(0,4);checkExPhone()">
+    <button class="btn-primary" id="ex_phone_btn" disabled onclick="go('existing_updates')">Verify</button>
+  </div>
+</div>
+
+<!-- EXISTING: UPDATES -->
+<div id="existing_updates" class="hidden">
+  <div class="logo">Franklin Dental</div>
+  <div class="card">
+    <button class="back-btn" onclick="go('existing_verify')">← Back</button>
+    <div class="progress"><div class="progress-dot done"></div><div class="progress-dot done"></div><div class="progress-dot done"></div><div class="progress-dot active"></div><div class="progress-dot"></div></div>
+    <h2>Anything changed?</h2>
+    <p class="sub">Help us keep your record up to date.</p>
+    <p style="font-size:15px;font-weight:600;margin-bottom:10px">Has your insurance changed?</p>
+    <div style="margin-bottom:20px">
+      <span class="chip" onclick="setIns(true)">Yes</span>
+      <span class="chip" onclick="setIns(false)">No</span>
+    </div>
+    <p style="font-size:15px;font-weight:600;margin-bottom:10px">Has your address or phone number changed?</p>
+    <div style="margin-bottom:16px">
+      <span class="chip" onclick="setAddr(true)">Yes</span>
+      <span class="chip" onclick="setAddr(false)">No</span>
+    </div>
+    <div id="update_warning" class="warning-box hidden">Please let the front desk know when you're called back so we can update your records.</div>
+    <button class="btn-primary" id="ex_update_btn" disabled onclick="go('existing_done')">Complete check-in</button>
+  </div>
+</div>
+
+<!-- EXISTING: DONE -->
+<div id="existing_done" class="hidden">
+  <div class="logo">Franklin Dental</div>
+  <div class="success-card">
+    <div class="success-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <h2>You're checked in!</h2>
+    <p id="ex_done_msg" style="font-size:15px;color:#5C7A7D;margin:8px 0 24px;line-height:1.5">Have a seat — we'll call your name shortly.</p>
+    <button class="btn-secondary" onclick="resetAll()">Check in another patient</button>
+  </div>
+</div>
+
+<!-- WALKIN: NAME -->
+<div id="walkin_name" class="hidden">
+  <div class="logo">Franklin Dental</div>
+  <div class="card">
+    <button class="back-btn" onclick="go('fork')">← Back</button>
+    <div class="progress"><div class="progress-dot active"></div><div class="progress-dot"></div><div class="progress-dot"></div></div>
+    <h2>Walk-in visit</h2>
+    <p class="sub">Let us know who you are and we'll get you on the list.</p>
+    <label>First name</label><input type="text" id="wi_first" placeholder="Jane" oninput="checkWiName()">
+    <label>Last name</label><input type="text" id="wi_last" placeholder="Smith" oninput="checkWiName()">
+    <label>Date of birth</label><input type="date" id="wi_dob">
+    <button class="btn-primary" id="wi_name_btn" disabled onclick="go('walkin_reason')">Continue</button>
+  </div>
+</div>
+
+<!-- WALKIN: REASON -->
+<div id="walkin_reason" class="hidden">
+  <div class="logo">Franklin Dental</div>
+  <div class="card">
+    <button class="back-btn" onclick="go('walkin_name')">← Back</button>
+    <div class="progress"><div class="progress-dot done"></div><div class="progress-dot active"></div><div class="progress-dot"></div></div>
+    <h2>Reason for visit</h2>
+    <p class="sub">Select the reason that best fits — this helps us prepare.</p>
+    <div id="reason_chips"></div>
+    <button class="btn-primary" id="wi_reason_btn" disabled onclick="go('walkin_done')">Add me to the list</button>
+  </div>
+</div>
+
+<!-- WALKIN: DONE -->
+<div id="walkin_done" class="hidden">
+  <div class="logo">Franklin Dental</div>
+  <div class="success-card">
+    <div class="success-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <h2>You're on the list!</h2>
+    <p id="wi_done_name" style="font-size:15px;color:#5C7A7D;margin:8px 0 8px;line-height:1.5"></p>
+    <p style="font-size:13px;color:#5C7A7D;margin:0 0 24px;font-style:italic">Walk-ins are seen between scheduled appointments — thank you for your patience.</p>
+    <button class="btn-secondary" onclick="resetAll()">Check in another patient</button>
+  </div>
+</div>
+
+<!-- NEW: INFO -->
+<div id="new_info" class="hidden">
+  <div class="logo">Franklin Dental</div>
+  <div class="card">
+    <button class="back-btn" onclick="go('fork')">← Back</button>
+    <div class="progress"><div class="progress-dot active"></div><div class="progress-dot"></div></div>
+    <h2>Welcome to Franklin Dental!</h2>
+    <p class="sub">We just need a few details, then we'll text you the new-patient forms to fill out on your phone.</p>
+    <label>First name</label><input type="text" id="np_first" placeholder="Jane" oninput="checkNewInfo()">
+    <label>Last name</label><input type="text" id="np_last" placeholder="Smith" oninput="checkNewInfo()">
+    <label>Date of birth</label><input type="date" id="np_dob" oninput="checkNewInfo()">
+    <label>Phone number</label><input type="tel" id="np_phone" placeholder="(555) 123-4567" inputmode="tel" oninput="checkNewInfo()">
+    <label>Email (optional)</label><input type="email" id="np_email" placeholder="jane@email.com">
+    <button class="btn-primary" id="np_info_btn" disabled onclick="go('new_done')">Send me the forms</button>
+  </div>
+</div>
+
+<!-- NEW: DONE -->
+<div id="new_done" class="hidden">
+  <div class="logo">Franklin Dental</div>
+  <div class="success-card">
+    <div class="success-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <h2>Forms on their way!</h2>
+    <p id="np_done_name" style="font-size:15px;color:#5C7A7D;margin:8px 0 12px;line-height:1.5"></p>
+    <div class="next-steps">
+      <p style="font-size:14px;font-weight:600;margin:0 0 10px;color:#17252A">What happens next:</p>
+      <div style="font-size:14px;color:#5C7A7D;line-height:1.7">📱 Complete the forms on your phone<br>📋 Bring your insurance card to the front desk<br>🪑 Have a seat — we'll call you when ready</div>
+    </div>
+    <button class="btn-secondary" onclick="resetAll()">Check in another patient</button>
+  </div>
+</div>
+
+<script>
+var screens = ['welcome','fork','existing_name','existing_confirm','existing_verify','existing_updates','existing_done','walkin_name','walkin_reason','walkin_done','new_info','new_done'];
+var insChanged = null, addrChanged = null, selectedReason = '';
+
+function go(id) {
+  screens.forEach(function(s){document.getElementById(s).classList.add('hidden')});
+  document.getElementById(id).classList.remove('hidden');
+  window.scrollTo(0,0);
+  if(id==='existing_confirm') {
+    document.getElementById('confirm_name').textContent = val('ex_first')+' '+val('ex_last');
+    var d = val('ex_dob'); if(d){var dt=new Date(d+'T00:00:00'); document.getElementById('confirm_dob').textContent='Born '+dt.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});}
+  }
+  if(id==='existing_done') {
+    var msg = "Have a seat — we'll call your name shortly.";
+    if(insChanged||addrChanged) { msg += "\n\nPlease have your updated "; if(insChanged) msg+="insurance card"; if(insChanged&&addrChanged) msg+=" and "; if(addrChanged) msg+="address/phone info"; msg+=" ready."; }
+    document.getElementById('ex_done_msg').textContent = msg;
+  }
+  if(id==='walkin_done') { document.getElementById('wi_done_name').textContent = val('wi_first')+", we've added you as a walk-in. Please have a seat and the front desk will call you as soon as possible."; }
+  if(id==='new_done') { document.getElementById('np_done_name').textContent = val('np_first')+", check your phone — we're sending the new-patient registration and media consent forms now."; }
+  if(id==='walkin_reason' && !document.getElementById('reason_chips').hasChildNodes()) { buildReasons(); }
+}
+
+function val(id){return document.getElementById(id).value.trim()}
+function checkExName(){document.getElementById('ex_name_btn').disabled=!(val('ex_first')&&val('ex_last')&&val('ex_dob'))}
+function checkExPhone(){document.getElementById('ex_phone_btn').disabled=val('ex_phone').length<4}
+function checkWiName(){document.getElementById('wi_name_btn').disabled=!(val('wi_first')&&val('wi_last'))}
+function checkNewInfo(){document.getElementById('np_info_btn').disabled=!(val('np_first')&&val('np_last')&&val('np_dob')&&val('np_phone'))}
+
+function setIns(v){insChanged=v; updateChips(0,v); checkUpdates()}
+function setAddr(v){addrChanged=v; updateChips(1,v); checkUpdates()}
+function updateChips(group,v){
+  var containers = document.getElementById('existing_updates').querySelectorAll('div[style]');
+  var chips; if(group===0){chips=containers[0].querySelectorAll('.chip')}else{chips=containers[1].querySelectorAll('.chip')}
+  chips[0].className='chip'+(v===true?' selected':'');
+  chips[1].className='chip'+(v===false?' selected':'');
+}
+function checkUpdates(){
+  document.getElementById('update_warning').classList.toggle('hidden',!(insChanged||addrChanged));
+  document.getElementById('ex_update_btn').disabled=(insChanged===null||addrChanged===null);
+}
+
+function buildReasons(){
+  var reasons=['Toothache or pain','Broken or chipped tooth','Lost filling or crown','Cleaning','Other'];
+  var container=document.getElementById('reason_chips');
+  reasons.forEach(function(r){
+    var span=document.createElement('span'); span.className='chip'; span.textContent=r;
+    span.onclick=function(){
+      selectedReason=r;
+      container.querySelectorAll('.chip').forEach(function(c){c.className='chip'});
+      span.className='chip selected';
+      document.getElementById('wi_reason_btn').disabled=false;
+    };
+    container.appendChild(span);
+  });
+}
+
+function resetAll(){
+  ['ex_first','ex_last','ex_dob','ex_phone','wi_first','wi_last','wi_dob','np_first','np_last','np_dob','np_phone','np_email'].forEach(function(id){document.getElementById(id).value=''});
+  insChanged=null; addrChanged=null; selectedReason='';
+  var rc=document.getElementById('reason_chips'); while(rc.firstChild) rc.removeChild(rc.firstChild);
+  go('fork');
+}
+
+setTimeout(function(){go('fork')},2800);
+</script>
+</body>
+</html>
